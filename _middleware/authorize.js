@@ -1,26 +1,25 @@
-const jwt = require('express-jwt');
-const { secret } = require('config.json');
-const db = require('_helpers/db');
+const jwt = require("jsonwebtoken");
+const { secret } = require("config.json");
 
 module.exports = authorize;
 
-function authorize() {
-    return [
-        // authenticate JWT token and attach decoded token to request as req.user
-        jwt({ secret, algorithms: ['HS256'] }),
+function authorize(req, res, next) {
+  const token = req.cookies.token;
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Authenticate first to access this api" });
+  }
 
-        // attach full user record to request object
-        async (req, res, next) => {
-            // get user with id from token 'sub' (subject) property
-            const user = await db.User.findByPk(req.user.sub);
+  // get user with id from token 'sub' (subject) property
+  // const user = await db.User.findByPk(req.user.sub);
+  const user = jwt.verify(token, secret);
+  console.log(user);
 
-            // check user still exists
-            if (!user)
-                return res.status(401).json({ message: 'Unauthorized' });
+  // check user still exists
+  if (!user) return res.status(401).json({ message: "Unauthorized" });
 
-            // authorization successful
-            req.user = user.get();
-            next();
-        }
-    ];
+  // authorization successful
+  req.user = user;
+  next();
 }
