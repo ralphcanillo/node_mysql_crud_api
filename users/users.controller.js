@@ -8,11 +8,11 @@ const authorize = require('_middleware/authorize');
 
 // routes
 router.post('/authenticate', authenticateSchema, authenticate);
-router.post('/', registerSchema, register);
+router.post('/register', registerSchema, register);
 router.get('/current', authorize(), getCurrent);
 router.get('/', authorize(), getAll);
 router.get('/:id', authorize(), getById);
-//router.post('/', authorize(), registerSchema, register);
+router.post("/logout", logout);
 router.put('/:id', authorize(), updateSchema, update);
 router.delete('/:id',authorize(),  _delete);
 
@@ -29,9 +29,27 @@ function authenticateSchema(req, res, next) {
 }
 
 function authenticate(req, res, next) {
-    userService.authenticate(req.body)
-        .then(user => res.json(user))
-        .catch(next);
+    userService
+      .authenticate(req.body)
+      .then((user) => {
+        //send the cookie to the browser
+        res.cookie("token", user.token);
+        res.json(user);
+      })
+      .catch(next);
+}
+
+function logout(req, res, next) {
+    try {
+      res.cookie("token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      });
+  
+      res.status(200).json({ message: "Logout Successfully" });
+    } catch (e) {
+      next();
+    }
 }
 
 function registerSchema(req, res, next) {

@@ -11,12 +11,11 @@ function model(sequelize) {
         lastName: { type: DataTypes.STRING, allowNull: false },
         role: { type: DataTypes.STRING, allowNull: false },
         username: { type: DataTypes.STRING, allowNull: false },
-        
     };
 
     const options = {
         defaultScope: {
-            // exclude password hash by default
+            // exclude hash by default
             attributes: { exclude: ['hash'] }
         },
         scopes: {

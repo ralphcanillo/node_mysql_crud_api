@@ -7,8 +7,6 @@ const errorHandler = require('_middleware/error-handler');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // api routes
