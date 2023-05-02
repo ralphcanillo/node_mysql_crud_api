@@ -37,9 +37,9 @@ function authenticate(req, res, next) {
         res.json(user);
       })
       .catch(next);
-}
-
-function logout(req, res, next) {
+  }
+  
+  function logout(req, res, next) {
     try {
       res.cookie("token", null, {
         expires: new Date(Date.now()),
@@ -50,7 +50,7 @@ function logout(req, res, next) {
     } catch (e) {
       next();
     }
-}
+  }
 
 function registerSchema(req, res, next) {
     const schema = Joi.object({
