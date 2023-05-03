@@ -7,10 +7,14 @@ const bodyParser = require('body-parser');
 const errorHandler = require('_middleware/error-handler');
 
 
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use(cookieParser());
+
+// SAMPLE
+const authorize = require('./_middleware/authorize');
+
 
 // api routes
 app.use('/users', require('./users/users.controller'));

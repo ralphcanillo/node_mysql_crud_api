@@ -9,12 +9,12 @@ const authorize = require('_middleware/authorize');
 // routes
 router.post('/authenticate', authenticateSchema, authenticate);
 router.post('/register', registerSchema, register);
-router.get('/current', authorize(), getCurrent);
-router.get('/', authorize(), getAll);
-router.get('/:id', authorize(), getById);
+router.get('/current', authorize, getCurrent);
+router.get('/', authorize, getAll);
+router.get('/:id', authorize, getById);
 router.post("/logout", logout);
-router.put('/:id', authorize(), updateSchema, update);
-router.delete('/:id',authorize(),  _delete);
+router.put('/:id', authorize, updateSchema, update);
+router.delete('/:id',authorize,  _delete);
 
 module.exports = router;
 
